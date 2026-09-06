@@ -1,0 +1,30 @@
+# dsh-skill-forge bundle patch: inserts the forge row over the composed profile.
+# The row registers the /skill-forge command (draft|save|list|help), the
+# system-prompt section (distillation policy, policy band, order 50, English),
+# a settings namespace shared with the web client, and lifecycle hooks.
+# Config is validated at plugin load.
+#
+# SKILL ROOTS (per-workspace flow — see README "Skill roots"):
+# the plugin saves agent-forged skills as directory bundles
+#   <projectRoot>/.agents/skills/<name>/SKILL.md
+# so the dsh-skill-filesystem provider discovers them with rank 200
+# (project-agents). Project root = nearest ancestor containing .git,
+# else the session cwd. Nothing is written outside the calling workspace.
+#
+# PATCH IDS: patch rows target the entry's composed id (options.id —
+# "dsh-skill-forge"), NOT the loader's namespaced runtime id
+# ("include:dsh-skill-forge").
+
+- insert:
+    - id: dsh-skill-forge
+      name: dsh-skill-forge
+      config:
+        enabled: true
+        order: 50
+        allowCommand: true
+        defaultSkillRoot: ".agents/skills"
+
+# To disable this row from the profile's own cordis.patch.yml, target the
+# composed id, not the namespaced runtime id:
+# - id: dsh-skill-forge
+#   disabled: true
